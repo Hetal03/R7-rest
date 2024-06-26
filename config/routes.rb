@@ -4,5 +4,14 @@ Rails.application.routes.draw do
                  sessions: 'users/sessions',
                  registrations: 'users/registrations'
              }
-  get '/test', to: 'test#show'
+  get 'test', to: 'test#index'
+  
+  namespace :api do
+    namespace :v1 do
+      resources :members do
+        resources :facts
+      end
+    end
+  end
+
 end
