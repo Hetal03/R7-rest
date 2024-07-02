@@ -70,3 +70,5 @@ gem 'bigdecimal'
 
 gem 'mutex_m'
 
+gem "rack-cors"
+
