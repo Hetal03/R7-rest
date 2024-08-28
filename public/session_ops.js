@@ -1,3 +1,5 @@
+import { getCookie } from "./cookie_finder.js"
+
 function handle_session() {
   console.log('DOM fully loaded and parsed');
   const resultsDiv = document.getElementById('results-div');
@@ -9,7 +11,7 @@ function handle_session() {
   const userPassword = document.getElementById('user-password');
   const userEmail1 = document.getElementById('user-email1');
   const userPassword1 = document.getElementById('user-password1');
-  const users_path = 'http://localhost:3000/api/v1/users';
+  const users_path = '/users';
 
   restOpsDiv.addEventListener('click', (event) => {
     if (event.target === logonButton) {
@@ -76,10 +78,14 @@ function handle_session() {
         }
       });
     } else if (event.target === logoffButton) {
+      let headers = {};
+      let csrf_cookie = getCookie("CSRF-TOKEN");
+      if (csrf_cookie) {
+        headers = { 'X-CSRF-Token': csrf_cookie }
+      }
       fetch(`${users_path}/sign_out`,
         { method: 'DELETE',
-          headers: { 'Content-Type': 'application/json',
-            'authorization': localStorage.getItem("authHeader") },
+          headers: headers
         }
       ).then((response) => {
         if (response.status === 200) {
@@ -98,7 +104,6 @@ function handle_session() {
           });
         }
       });
-      localStorage.removeItem("authHeader");
     }
   });
 }
